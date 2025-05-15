@@ -1,13 +1,9 @@
-const sqlite3 = require('sqlite3');
-const { open } = require('sqlite');
+const Database = require('better-sqlite3');
 
-async function createDb() {
-  const db = await open({
-    filename: './database.db',
-    driver: sqlite3.Database
-  });
+function createDb() {
+  const db = new Database('./database.db');
 
-  await db.run(`
+  db.prepare(`
     CREATE TABLE IF NOT EXISTS products (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT,
@@ -16,7 +12,7 @@ async function createDb() {
       expiry_date TEXT,
       is_new BOOLEAN
     )
-  `);
+  `).run();
 
   return db;
 }
